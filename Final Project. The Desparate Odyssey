@@ -1,1 +1,969 @@
+#!/usr/bin/env python
+# coding: utf-8
+
+# In[ ]:
+
+
+import time
+import random
+import winsound
+
+achievements = []  # list of achievements
+
+
+def add_achievement(achievement):  # function to add achievements
+    achievements.append(achievement)
+    print(f"Achievement unlocked: {achievement}")
+
+
+def print_in_color(text, color_code):  # function to display coloured text
+    print(f'\033[{color_code}m{text}\033[0m', end='')
+
+
+def disp_strtscreen():  # function to display start screen
+    game_name: str = str('tHe DeSpErAtE oDySsEy')
+    segment_1 = str('"BEHIND THE DOORS, OUR FUTURE LIES IN WAIT')
+    segment_2 = str(' A YEARNING THAT BECKONS, AN ANTICIPATED FATE"')
+    footer = '_'
+    strt_pt: str = (game_name.center(70, "`"))
+    seg1_pt: str = str(segment_1.center(70))
+    seg2_pt: str = str(segment_2.center(70))
+    ft = footer.center(70, "_")
+    print()
+    print_in_color(strt_pt, '91')
+    print()
+    print(seg1_pt)
+    print()
+    print(seg2_pt)
+    print(ft)
+    print()
+
+
+def random_chance(value, percentage_error):  # value is the value for error, % error is a given % error for that value
+    max_error = (percentage_error / 100) * value
+    error = random.uniform(0, max_error)
+    error = error * random.choice([-1, 1])
+    return round(error, 2)
+
+
+def boss_fight():  # function to carry out boss fight
+    print("The battle has begun!")
+    display_text("""\nLet's get this party started Alex! 
+For so long you've been a pathetic weakling!""")
+    global player_attack
+    global player_hp
+    global curse
+    pray_count = 0
+    if curse:
+        print()
+        display_text("\nThe accursed shadows cling to you, imbuing your flesh with the might of darkness.")
+        player_hp = - 10
+    victorious = False
+    boss_hp = 100
+    boss_attack = 25
+    while not victorious:
+        if pray_count == 3:
+            victorious = True
+            display_text("""\n*the blade of god descends from above. 
+As it acknowledges its new owner,
+you smite the devil.*""")
+            devil_defeated()
+        choice = input("\nWhat is your action? (attack/pray/run) > _ ").lower()
+        if choice == 'attack':
+            boss_hp -= round((player_attack + random_chance(player_attack, 50)), 2)
+            winsound.PlaySound("damage", winsound.SND_FILENAME)
+            print(f"Boss hp now at {boss_hp}")
+            if boss_hp <= 0:
+                display_text("\nYou have defeated the Devil, and are now free! Congratulations.\n")
+                winsound.PlaySound("victory", winsound.SND_FILENAME)
+                print()
+                victorious = True
+                devil_defeated()
+        elif (choice == 'pray') and curse:
+            print()
+            display_text("The curse has been lifted! The shadows dissipate.")
+            display_text(". Player has gained 10 health")
+            player_hp += 10
+            player_attack += 10
+            pray_count += 1
+        elif choice == 'pray':
+            display_text("You receive a blessing from above")
+            winsound.PlaySound("blessing", winsound.SND_FILENAME)
+            player_attack += 10
+            player_hp += 10
+            pray_count += 1
+        elif choice == 'run':
+            display_text("You can't run from fate.")
+            print_in_color("\nPlayer has died", '91')
+            winsound.PlaySound("Gameover", winsound.SND_FILENAME)
+            print('\n')
+            game_opt()
+            strt_game()
+
+        else:
+            print("\nAlex hesitates")
+            display_text("\nDavid attacks!")
+        print_in_color("\nDavid attacks!\n", '91')
+        winsound.PlaySound("injured", winsound.SND_FILENAME)
+        player_hp -= round((boss_attack + random_chance(boss_attack, 50)), 2)
+        print(f"Player hp now at {player_hp}")
+        if player_hp <= 0:
+            print("Player has died")
+            winsound.PlaySound("Gameover", winsound.SND_FILENAME)
+            game_opt()
+            strt_game()
+
+
+def devil_defeated():  # function to  devil is defeated in the boss fight
+    print()
+    display_text("""\n"Alex, you won't see the end of this!" David says, 
+*dissolving into a pool of miasma.*""")
+    winsound.PlaySound("victory", winsound.SND_FILENAME)
+    print('\n')
+    game_opt()
+    strt_game()
+
+
+disp_strtscreen()
+
+
+def game_opt():  # function to display various game options
+    print('\033[1;33m\"Will you unlock the mysteries?\" ...\033[0m')
+    print('\033[1;32m 1) Start\033[0m')
+    print('\033[1;36m 2) Skip Backstory\033[0m')
+    print('\033[1;31m 3) Quit\033[0m')
+    print()
+
+
+'''Section for Player Stats'''
+insight = False
+curse = False
+player_attack = 5
+player_hp = 100
+text_speed = 0.08
+
+game_opt()
+
+
+def display_text(text):  # function to control text speed
+    global text_speed
+    for char in text:
+        print(char, end='', flush=True)
+        time.sleep(text_speed)
+
+
+def lead_story():  # function to display backstory
+    global text_speed
+    text_speed_select = input("""How fast do you want the text to scroll?
+1 - Slow  
+2 - Normal 
+3 - Fast   (1/2/3) > _ """)
+    if text_speed_select == '1':
+        text_speed = 0.5
+    elif text_speed_select == '2':
+        text_speed = 0.08
+    elif text_speed_select == '3':
+        text_speed = 0.0005
+    else:
+        text_speed = 0.08
+    print_in_color('\nAlex Jones:', '34')
+    display_text("""\n  Another day, Another hour, my life goes down the drain.
+  Anne, oh my dear Anne, what would you think of me now?""")
+    print()
+    display_text('\n*screams of joy can be heard from a dark alley*')
+    print()
+    print_in_color('\nStranger:', '95')
+    display_text("\n  Margret honey, I'm rich !!!!")
+    print()
+    print_in_color('\nAlex Jones:', '34')
+    display_text('\n  Did he just have a hat full of gold?')
+    print()
+    display_text("""\n*Driven by curiosity, you cautiously step into the dark alley, 
+only to surprisingly find your boss within.*""")
+    print()
+    print_in_color('\nDavid Ethistle:', '91')
+    display_text('\n  Alex!!!, are you here to choose the fates beyond the doors')
+    print()
+    print_in_color('\nAlex Jones:', '34')
+    display_text("""\n  David, what are you doing here? and 
+  what do mean by fates beyond the doors?""")
+    print()
+    print_in_color('\nDavid Ethistle:', '91')
+    display_text("""\n  The doors hide fates that belong to you.
+    
+  One that stains your path in Disaster.
+  the Other leaves you to your sanity in a Room full of Nothing,
+  and lastly, One that summons the Treasures of Dreams,
+  but do be warned, the Treasures are to be enjoyed for the Moment,
+  not for Life.""")
+    print()
+    print_in_color('\nAlex Jones:', '34')
+    display_text("""\n Inner dialogue-
+   Is he serious? All this time he gives out free money 
+   and I can't even get a raise!!!
+   So many hours, I spent in that god forsaken company!!!! """)
+    print()
+    print_in_color('\nDavid Ethistle:', '91')
+    display_text('\n  What will it be lad?')
+    print()
+    print_in_color('\nAlex Jones:', '34')
+    display_text('\n  I\'ll indulge your foolish game')
+    print()
+    display_text("""\n Inner Dialogue -
+  BLOODY SLAVE DRIVER!!!!""")
+    print()
+    act_3 = str('\n*Mysterious Doors with ominous marking appear*')
+    display_text(act_3)
+    print()
+
+
+def display_vision():  # function to display and affect the necessary stats affected by vision
+    global insight
+    global player_attack
+    display_text(
+        """*A vision is bestowed upon you, showing you the path to greatness. 
+You see the image of a circle, constantly looping into itself.\n 
+Squinting, you make out what looks to be '2x2'. What could it mean?*\n""")
+    insight = True
+    display_text("\n*you have obtained a knife, attack increased*\n")
+    player_attack += 10
+
+
+def door_sel_1():  # function for Door Selection 1
+    print_in_color('\nDavid Ethistle:', '91')
+    door_1 = int(input('\n  What will be boyo? Door 1, 2 or 3 ... (1/2/3)> _ '))
+    if door_1 == 0:
+        print()
+        print("""  We count from 1 in this world,
+  Answer me again""")
+        door_sel_1()
+
+    elif door_1 < 4:
+        print()
+        print_in_color('Announcement: Door of Disaster selected', '91')
+        winsound.PlaySound("bla", winsound.SND_FILENAME)
+
+    else:
+        print()
+        display_text("""  \"It seems I have to put on my double seeing glasses, 
+  Because I can't begin to comprehend the amount of nonsense 
+  that coming from you\"""")
+        print()
+        door_sel_1()
+
+
+def room_1():  # function for interactions in the Room of Disaster
+    print()
+    print_in_color('\nAlex Jones:', '34')
+    display_text("""\n  Well, I guess fate wasn't on my side,
+  Ok David, you can let me out now.""")
+    print()
+    display_text("""\n*David doesn't respond and you proceed to learn the door is locked,
+and you start to panic*""")
+    print()
+    print_in_color('\nAlex Jones:', '34')
+    display_text('\n  Wait, did that gibberish he muttered earlier mean something?')
+    room1_dec = int(input("""\n  Well, there are two(2) options  here: 
+  1) Examine the area, 
+  2) Continue on, 
+  So 1 or 2, Alex think? (1/2) > _ """))
+    if room1_dec == 1:
+        act_5 = str('\n* A shadow creature emerges*')
+        display_text(act_5)
+        print()
+        print_in_color('\nAlex Jones:', '34')
+        display_text("""\n Inner Dialogue-
+  Should I:
+  1) take it out before it takes me out or 
+  2) try to communicate?""")
+        print()
+        in_dec = int(input('  So think, Alex think!!! (1/2) > _ '))
+        if in_dec == 1:
+            print()
+            display_text("""* As you confront the shadow creature, strange whispers surround you. 
+Gradually, you collapse and succumb to the shadows.*""")
+            print()
+            print_in_color('\nShadow Creature:', '36')
+            display_text('\n  Another disappointment, Why are we so weak?')
+            print()
+            display_text('  Here is your second chance at life, Alex ...')
+            print()
+
+            display_text('\n  What was I doing? Oh yeah I got the door of disaster')
+            print()
+            display_text('\n* you hear the door behind you close*')
+            room_1()
+        elif in_dec == 2:
+            print_in_color('\nAlex Jones:', '34')
+            display_text('\n cAn YoU uNdErStAnD Me? ...')
+            print()
+            print_in_color('\nShadow Creature:', '36')
+            display_text('\n  Yes, Alex-')
+            print()
+            display_text('*Panicking, you hastily rush in the other direction.*')
+            print()
+            shadow_dia()
+            door_sel_2()
+        else:
+            print('what other option can I think of')
+    elif room1_dec == 2:
+        print('\n*Amidst the dim and eerie room, you proceed towards the distant torches.*')
+        shadow_dia()
+        door_sel_2()
+    else:
+        print('\n*You sat and slowly fell into the slumber of death*')
+        print('\n')
+        game_opt()
+        strt_game()
+
+
+def shadow_dia():  # function to display dialogue with Shadow Creature before Door Selection 2
+    print()
+    act_8 = str("""*As you continue, you walk on a worn stone path,
+till doors similar to the first set of doors appear from a distance*""")
+    display_text(act_8)
+    print()
+    print_in_color('\nAlex Jones:', '34')
+    display_text('\n  The marking carved into the door seem familiar')
+    print()
+    display_text('\n*A shadow creature emerges from a dark corner*')
+    print()
+    print_in_color('\nShadow Creature:', '36')
+    display_text('\n  ahem, Hello there Alex Jones, glad to see you again.')
+    print()
+    print_in_color('\nAlex Jones:', '34')
+    display_text('\n  Again??!  Who are you?')
+    print()
+    print_in_color('\nShadow Creature:', '36')
+    display_text("""\n  Ahh!!! you\'re that type of Alex,
+  Forgive me, I'm am A25
+  you seem to be tired,
+  When last have you been home? Are you neglecting Anne again? """)
+    print()
+    print_in_color('\nAlex Jones:', '34')
+    display_text("""\n  AGAIN!!! ANNEEEEE!!! YOU KNOW NOTHING OF ANNE!!!!
+  YOU COME IN HERE WITH YOUR FANCY SHADOWS!!! A25, was it? 
+  I take insults about my laziness, and lack of motivation 24/7 but I won't,
+  I WON'T LET YOU INSULT THE WAY I CARED FOR ANNE""")
+    print()
+    print('\nA25 :')
+    display_text("""  ah I see, this was your ordeal, my apologies ...
+  I know an apology for a stranger won't do.
+  So, I will help you on your journey, do what you will with this.""")
+    print('\n')
+    display_text("""  'Beyond the door, a portal to another realm awaits,
+  And beyond that, a labyrinth of secrets unfolds,
+  Yet, the last of the doors, a sentinel in silence,
+  Stays locked, its essence yearning for the elusive key.
+  
+  But heed, your quest must transcend the tangible,
+  For the key is not of physical form, but a cipher,
+  A melody woven in the whispers of the one who guided you here.'
+  
+  So now, what will you do? enter the door with the 
+  1) mark of the heart
+  2) mark of the broken paths 
+  3) mark of the lost face""")
+
+
+def door_sel_2():  # function for Door Selection 2
+    print()
+    print_in_color('\nAlex Jones:', '34')
+    display_text("""\n  A riddle needs a clever mind,
+  an apology requires understanding of sorrows.
+  Thank you for your gesture, I accept your apology. 
+  and I apologize for my behavior.""")
+    print()
+    print('\nA25:')
+    display_text('  Allow me to give bestow upon you a hint')
+    print()
+    display_text("""\n*you receive an aged piece of paper
+with the writing 'I_ __ _h_ _____'*""")
+    print()
+    print_in_color('\nAlex Jones:', '34')
+    reply_gift = str("""\n Inner Dialogue-
+  What are these letters?""")
+    display_text(reply_gift)
+    print()
+    print('\nA25:')
+    check_mrk = int(input('  Now then, What is your choice? (1/2/3) > _ '))
+    if check_mrk == 1:  # Door of Treasure under Door Selection 2
+        print_in_color('\nAnnouncement: Door of Treasure selected', '94')
+        winsound.PlaySound("tres", winsound.SND_FILENAME)
+        print('\n')
+        add_achievement('Lessons Learned from Mistakes')
+        winsound.PlaySound("Zelda", winsound.SND_FILENAME)
+        print()
+        display_text("""* In the room, a shadow creature emerges next to 
+an aged torch, rust-stained, whispers tales of bygone eras.*""")
+        print()
+        print_in_color('\nShadow Creature:', '36')
+        display_text('\n  Pleasure to make you acquaintance, I\'m A20')
+        prt1_li2 = int(input("""\n  I shall provide either 
+  1) a hint for your journey
+  or 2) my struggles from my time in the labyrinth (1/2) > _ """))
+
+        if prt1_li2 == 1:
+            print()
+            display_text("""* shadows engulf the aged paper and new letters appear
+'I_ i_ _h_ _____'*    """)
+            print('\n')
+            display_vision()
+            print('\nA20:')
+            display_text("""  Now, head down the stone path 
+  and you shall arrive to the gates of the new realms""")
+            print()
+            david_dia()
+            door_sel_3()
+        elif prt1_li2 == 2:
+            print('\nA20:')
+            display_text("""  my time in the labyrinth was similar to the yours 
+  but I couldn't find the key, 
+  I mean we shadows wouldn't be here if we had.  
+  But do beware, he is always watching
+  Now, head down the path """)
+            print()
+            david_dia()
+            door_sel_3()
+        else:
+            print()
+            add_achievement(' Wasted Opportunity')
+            winsound.PlaySound("bla", winsound.SND_FILENAME)
+            print('\nA25:')
+            display_text(""" Not content with 2 options I see,
+  I tell you about my time here
+  
+  my time in the labyrinth was similar to the yours 
+  but I couldn't find the key, 
+  I mean we shadows wouldn't be here if we had.  
+  But do beware, he is always watching
+  Now, head down the path """)
+            print()
+            david_dia()
+            door_sel_3()
+
+    elif check_mrk == 2:  # Door of Disaster under  Door Selection 2
+        print_in_color('\nAnnouncement: Door of Disaster selected', '91')
+        print('\n')
+        add_achievement('you had one job, damn it')
+        winsound.PlaySound("bla", winsound.SND_FILENAME)
+        print()
+        display_text("""*Entering a dark room illuminated by a dying match,
+shadows hint at lurking hostility.*""")
+        print()
+        print_in_color('\nAlex Jones:', '34')
+        display_text('\n  Anne, looks like I get to see you now hun ...')
+        print()
+        display_text("""\n* Your hand instinctively finds the box of matches and 
+cigarettes tucked in your coat pocket.*""")
+        print()
+        quick_dec = int(input("""\n  What to do ?
+  1)Light a cigarette
+  or 2) be one with the darkness
+  
+  What to do, What to do? (1/2)> _ """))
+        if quick_dec == 1:
+            display_text(
+                """\n*you light a cigarette, revealing fragments of the room, 
+hostile shadows claw at your skin. *""")
+            print()
+            print_in_color('\nAlex Jones:', '34')
+            display_text('\n  It burns!!!!')
+            print()
+            print('\n Announcement: Curse Obtained')
+            winsound.PlaySound("curse", winsound.SND_FILENAME)
+            global curse
+            global player_attack
+            curse = True
+            player_attack += 20
+            print()
+            display_text('* you are then engulfed in shadows and start to hear voices *')
+            print()
+            print('\nMysterious Voice:')
+            display_text("""  Why do you rush what is important?
+  Stop for a second and think.
+  Have you never heard 
+  "there is no light without shadow" """)
+            print()
+            print_in_color('\nAlex Jones:', '34')
+            display_text('\n wHo ArE yOU? Ah!!! IT BURNNNNSSSS!!!!')
+            print()
+            print('\nMysterious Voice:')
+            display_text('  "I am who, I am" ')
+            print()
+            print_in_color('\nAlex Jones:', '34')
+            display_text("""\n  What does that evEN MEan?
+ 
+ Inner Dialogue-
+  The pain seems to be subsiding""")
+            print()
+            print('\nMysterious Voice:')
+            display_text("""  You've been stricken by a curse, making you stronger yet fragile
+  Now, follow my voice the exit """)  
+            print()
+            display_text('\n* you hesitantly comply and arrive at the next door selection*')
+            print('\n')
+            print_in_color('\nAlex Jones:', '34')
+            display_text('\n  Ok, another chance at life, here we go!!')
+            print()
+            david_dia()
+            door_sel_3()
+        elif quick_dec == 2:
+            display_text("""\n* You sit on the floor and withdraw your hand from your coat pocket. *""")
+            print()
+            print('\nMysterious Voice:')
+            display_text(""" So you're that type of person, 
+  most person believe in the 
+  "War is peace, 
+  Freedom is slavery, 
+  Ignorance is strength"
+  
+  But I guess there are exceptions in this modern day.""")
+            print()
+            print_in_color('\nAlex Jones:', '34')
+            display_text('\n  ... Who are you? What do you want from me?')
+            print()
+            print('\nMysterious Voice:')
+            display_text("""  I am A37, pleasure is mind to meet a man of literature.
+  What are you doing sitting still, 
+  you've got to get out of here to make the world a better place""")
+            print()
+            display_text("""\n* Before you could respond, 
+you find yourself transported to the next set of doors.*""")
+            print()
+            print('\nA37:')
+            display_text('  do be careful now ...')
+            print()
+            david_dia()
+            door_sel_3()
+        else:
+            display_text("""\n* Flustered by the approaching hostile shadows, 
+you hastily ignite the entire box of matches 
+in a desperate attempt to fend them off.*""")
+            print_in_color('\nAlex Jones:', '34')
+            display_text("""  Anne, hope I wasn't too long""")
+            print('\n')
+            game_opt()
+            strt_game()
+
+    elif check_mrk == 3:  # Door of Nothingness under Door Selection 2
+        print_in_color(' \nAnnouncement: Door of Nothingness selected', '95')
+        winsound.PlaySound("bla", winsound.SND_FILENAME)
+        print('\n')
+        add_achievement('I was crazy one ...')
+        winsound.PlaySound("Zelda", winsound.SND_FILENAME)
+        print()
+        display_text("""* A thick fog envelops the room, 
+The floor is submerged in water, 
+Before you, an antique bar stool stands solitary *""")
+        print()
+        print_in_color('\nAlex Jones:', '34')
+        display_text("""\n  *yawns* I seems I have stopped since I started
+  It should ok if I take a few seconds of rest, 
+  right Anne?""")
+        print()
+        display_text("""\n*As you settle onto the stool 
+and your eyelids gradually descend, 
+shadows begin to ooze from your very being.*""")
+        print('\n')
+        add_achievement('Just Need a Minute')
+        winsound.PlaySound("Zelda", winsound.SND_FILENAME)
+        print()
+        print('A100:')
+        display_text('Who is that? Why am I here?')
+        print()
+        display_text("""\n*As A100 gazes upon its previous form, 
+a detachment takes hold, severing all remaining ties.*""")
+        winsound.PlaySound("Gameover", winsound.SND_FILENAME)
+        print('\n')
+        game_opt()
+        strt_game()
+    else:
+        print()
+        print('A25:')
+        display_text("""  you will meet your end if you stay here, 
+  you have to do something.
+  Are you going to 1) make a choice or 2) die for no reason?""")
+        print()
+        fin_choice = int(input('\n  So, what will it be? (1/2)> _ '))
+        if fin_choice == 1:
+            door_sel_2()
+        elif fin_choice == 2:  # hidden ending
+            print_in_color('\nAlex Jones:', '34')
+            display_text("""\n  Life may have had a purpose before I met her, 
+  but as she entered my life, she was my purpose, 
+  and my purpose forsook my efforts,
+  hence, I shall forsake the efforts that keep me living""")
+            print()
+            display_text("""\n*you slowly close your eyes and pass away, as a shadow 
+emerges from your corpse*""")
+            print()
+            print('\nA25:')
+            display_text("""  sigh, 
+  I thought I was the one who loved her to my death,
+  Welcome A100""")
+            print('\n')
+            add_achievement('Shoulders of Stone, Bearing Burdens Till They Weather')
+            winsound.PlaySound("Zelda", winsound.SND_FILENAME)
+            print()
+            game_opt()
+            strt_game()
+        else:
+            reply_sh1 = str('\n  I guess you are too far gone')
+            display_text(reply_sh1)
+            print('\n')
+            add_achievement('Insane from the start')
+            winsound.PlaySound("Zelda", winsound.SND_FILENAME)
+            print('\n')
+            game_opt()
+            strt_game()
+
+
+def david_dia():  # function to display David's dialogue before door selection 3
+    display_text('\n* As you approach the next set of doors, David emerges from the shadows*')
+    print()
+    print_in_color('\nDavid Ethistle:', '91')
+    display_text("""\n  Hey there boyo!!
+  Have figured out that name of mine, 
+  that I've had for centuries?""")
+    print()
+    print_in_color('\nAlex Jones:', '34')
+    display_text("""\n Inner Dialogue:
+  How does he know about that?
+  Centuries!!!! Just who is he """)
+    print()
+    print_in_color('\nDavid Ethistle:', '91')
+    display_text("""\n  You look surprised,
+  did you thing because I left you alone,
+  I wasn't watching you, 
+  I have been years and years, lad.""")
+    print()
+    display_text('\n*David starts laughing hysterically*')
+    print()
+    print_in_color('\nAlex Jones:', '34')
+    display_text("""\n  You think this is a joke?!!! 
+  You first work me to the bone,
+  then you lock me in here, promising a reward
+  Have you had fun these centuries toying with puppets like me?!!!""")
+    print()
+    print_in_color('\nDavid Ethistle:', '91')
+    display_text("""\n  Of course, I've had fun with my eternal rule,
+  You seem to forget, for centuries, 
+  I've hear these words time and time again
+  But all have failed to convince me, they were right...
+  
+  Perhaps I shall give you a chance.
+  
+  My guise may bear the name David Ethistle, yet the order in which 
+  the shadows have sought to lead you reveals the true essence of my name.""")
+    print()
+    act_12 = str("""\n*David disappears once again into the shadows, 
+while muttering unintelligible speech*""")
+    display_text(act_12)
+    print()
+    print_in_color('\nAlex Jones:', '34')
+    display_text("""\n  Wait- ...
+  That arrogant bastard, 
+  well now I know what the letters are for""")
+
+
+def door_sel_3():  # function for door selection 3
+    print()
+    display_text("""\n  The doors have the same marks as before the:  
+    1) mark of the lost face
+    2) mark of the heart 
+    3) mark of the broken paths""")
+    print()
+    check_mrk = int(input('\n  What ever will I do? (1/2/3) > _ '))
+    print()
+    if check_mrk == 1:
+        print_in_color('Announcement: Door of Nothingness selected', '95')
+        winsound.PlaySound("bla", winsound.SND_FILENAME)
+        print('\n')
+        display_text("""* You step into a deserted library, 
+and a journal drops at your feet from a nearby shelf.*""")
+        print()
+        print_in_color('\nAlex Jones:', '34')
+        display_text('\n  ... Come out, come out, where ever you are little shadow?')
+        print()
+        display_text("""\n*The library remains silent, as you cautiously reach for the journal.*""")
+        print()
+        print_in_color('\nAlex Jones:', '34')
+        display_text("""\n  ... ah ah ahem, The Beginning of the Eternal Rule
+  and my endless torment by Alex Jones-""")
+        print()
+        display_text("""\n* An blurry photo portraying 
+a figure with a tail and horns falls out from the pages of the journal.*""")
+        print()
+        print_in_color('\nAlex Jones:', '34')
+        display_text("""\n  Wonder, who this is? 
+  someone signed it "Your our last hope Alex signed" Alex Jones" """)
+        print()
+        display_text("""\n*Shadowy tendrils seep out from the edges of the photo, 
+engulfing the aged paper*""")
+        print()
+        print_in_color('\nAlex Jones:', '34')
+        display_text("""\n  Seems the letters have been updated 'I_ is _h_ _____' """)
+        print()
+        display_text('\n*the fogs suddenly disperse as three doors are revealed*')
+        print()
+        shadows_message()
+        door_sel_4()
+    elif check_mrk == 2:
+        print_in_color('Announcement: Door of Treasure selected', '34')
+        winsound.PlaySound("tres", winsound.SND_FILENAME)
+        print()
+        display_text("""\n*Upon entering, a ring rolls to your feet from the mist, 
+accompanied by the approach of a silhouette. *""")
+        print()
+        print_in_color('\nAlex Jones:', '34')
+        display_text('\n  Halt!!! Whose there?')
+        print()
+        display_text("""\n*Emerging gradually from the mist, 
+a woman makes a slow entrance.*""")
+        print()
+        print('\nMystery Woman:')
+        display_text("""  Alex, it's me!!! What are you doing? 
+  Now, please for my ring,
+  we're going to be late.""")
+        print()
+        print_in_color('\nAlex Jones:', '34')
+        display_text('\n  Anne, is that you?')
+        print()
+        display_text('\n*Tears stream down as you hand the mystery woman her ring. * ')
+        print()
+        print_in_color('\nAnne:', '32')
+        display_text("""\n  Yes, in the flesh, 
+  have you forgotten your fiance already? It has only been 2 day since you proposed but-
+  Alexxxxxxx!!! What's wrong? Why are you crying?""")
+        print()
+        print_in_color('\nAlex Jones:', '34')
+        display_text("""\n  Nothing, Nothing, just glad to see again ...
+  Come on, let's go!!""")
+        print()
+        display_text("""\n* Your hand is enveloped by Anne's, 
+and you trail behind her until you've passed a solitary tree.*""")
+        print()
+        print_in_color('\nAlex Jones:', '34')
+        display_text('\n  Wait Anne, ...')
+        print()
+        display_text("""\n*At the tree, reminiscent of Anne's grave, 
+now stand two tombstones: "A1" and "A15",
+Suddenly, whispers remind you of her death. *""")
+        print()
+        print_in_color('\nAlex Jones:', '34')
+        display_text("""\n  Shut uppp!!!!""")
+        print()
+        print_in_color('\nAnne:', '32')
+        display_text("\n  Alex, you're acting strange. Are you ok?")
+        print()
+        print_in_color('\nAlex Jones', '34')
+        display_text('\n  yeah, I\'m sorry. Where are we going?')
+        print()
+        print_in_color('\nAnne:', '32')
+        display_text('\n  The church hun, Are you that nervous?')
+        print()
+        print_in_color('\nAlex Jones:', '34')
+        display_text("""\n Inner Dialogue-
+  David, you bastard!! 
+  I will take all kinds of torture
+  but some lines can't be crossed!!""")
+        print()
+        print_in_color('\nAnne:', '32')
+        display_text('\n  Are you coming?')
+        print()
+        print_in_color('\nAlex Jones:', '34')
+        marriage = int(input("""\n Inner Dialogue-
+  1) You know the truth
+  2) I should finally live my life
+  What do I do? (1/2) > _ """))
+        if marriage == 1:
+            print()
+            print_in_color('Alex Jones', '34')
+            display_text("""\n  Anne!!, I will love until the end of my life,
+  I'm  so lucky that I had you in my life and 
+  I'm grateful for everything until I grow old ...""")
+            print()
+            display_text("""\n*Reluctantly, you dart into the darkness, 
+distancing yourself from the church*""")
+            print('\n')
+            add_achievement('I\'ll settle for the ghost of you ...')
+            winsound.PlaySound("Zelda", winsound.SND_FILENAME)
+            print()
+            display_text("""*As you continue to run you arrive at another set of doors,*""")
+            print()
+            print('\nA25:')
+            display_text('  you made the right choice lad ...')
+            print()
+            shadows_message()
+            door_sel_4()
+
+        elif marriage == 2:
+            print()
+            print_in_color('Alex Jones:', '34')
+            display_text(""" \n *you muster a forced smile * yes, my love ...""")
+            print('\n')
+            add_achievement('Marry that girl')
+            winsound.PlaySound("Zelda", winsound.SND_FILENAME)
+            print()
+            display_text("""*Upon entering the church, you and Anne exchange your vows. 
+Suddenly, you find yourselves transported back outside to the graves you visited earlier.* """)
+            print()
+            print_in_color('\nDavid Ethistle:', '91')
+            display_text("""\n  Alex, Alex , Alex ...
+  This is disappointing, you were suppose to be the diamond rough
+  to come and challenge when I resurrected her
+  But I was wrong ...""")
+            print()
+            display_text("""\n*With a snap of David's fingers, 
+Anne reverts to being a grave, and a trapdoor opens beneath Alex, 
+causing him to plummet to his death*""")
+            winsound.PlaySound("Gameover", winsound.SND_FILENAME)
+            print('\n')
+            game_opt()
+            strt_game()
+
+        else:
+            print()
+            display_text('*your anxiety gets the best of you and you dash into the darkness and end up at the *')
+            print()
+            shadows_message()
+            door_sel_4()
+
+    elif check_mrk == 3:
+        global curse
+        global player_attack
+        print_in_color('Announcement: Door of Disaster selected', '91')
+        winsound.PlaySound("bla", winsound.SND_FILENAME)
+        print()
+        print('\nAnnouncement: Curse Obtained')
+        winsound.PlaySound("curse", winsound.SND_FILENAME)
+        curse = True
+        player_attack += 10
+        shadows_message()
+        door_sel_4()
+
+    else:
+        display_text("""\n  Where are the other options? 
+  Until other doors show up, I only have three""")
+        door_sel_3()
+
+
+def shadows_message():  # final shadow dialogue with shadows before final dialogue
+    display_text('\n*Shadow Creatures emerge from the floor below you*')
+    print()
+    print('\nA25:')
+    display_text("""  Alex Jones, you have your final choice 
+  in front of you,
+  and we would to bestow upon you a final hint """)
+    print()
+    display_text("""\n*shadows engulf the aged paper, 
+'I_ is _h_ d____' *""")
+    print()
+
+
+def door_sel_4():  # function for the Door Selection 2
+    print_in_color('\nAlex Jones:', '34')
+    door_4 = int(input("""\n  Three doors ..., didn't see that coming,'
+  These markings on these doors seem to have worn off,
+  Where do I go? (1/2/3) > _ """))
+    if door_4 == 0:
+        print()
+        print("""  Door 0 seems nice, 
+  But how do I get to it? ...
+  This is a waste of time,
+      
+      This place is changing me. Never thought I'd be calling myself out for wasting time.""")
+        door_sel_4()
+
+    elif door_4 < 4:
+        print()
+        print('Announcement: Final Door Selected')
+        winsound.PlaySound("bla", winsound.SND_FILENAME)
+        print()
+        display_text("""*You step into a room, 
+facing a single door ahead while the three doors remain behind you.*""")
+        print()
+        print('\nMysterious Voice:')
+        display_text("""  Come now, OH GODLY ONE, 
+  do you have the key of the labrynth?
+  whose whispers guided you here _____?""")
+        print()
+        print_in_color('\nAlex Jones:', '34')
+        key = str(input('\n  The key is the _____ (lower case) > _ '))
+        print()
+        if key == 'david':
+            display_text('*From the shadows, David materializes, unveiling his true form* ')
+            print()
+            print('\nDevil:')
+            display_text("""  It seems my eternal rule will continue
+  God's shall stay in the grave.
+       
+  Shadows take him away!!!""")
+            print()
+            display_text("""\n* you are slowly devoured by the shadows*""")
+            print()
+            print_in_color('\nAlex Jones:', '34')
+            display_text("""\n  Ahh, now I remember
+  that idiot killed me
+  have I become this weak over the eras? ...""")
+            print('\n')
+            game_opt()
+            strt_game()
+        elif key == "devil":
+            winsound.PlaySound("Zelda", winsound.SND_FILENAME)
+            print('Boss Fight')
+            boss_fight()
+        else:
+            print_in_color('\nDevil', '91')
+            display_text('\n  It seems you weren\'t much promise')
+            winsound.PlaySound("bla", winsound.SND_FILENAME)
+            print()
+            display_text('\n*Shadows start emerging out of your body as you’re devoured by the devil*')
+            winsound.PlaySound("Gameover", winsound.SND_FILENAME)
+            print('\n')
+            game_opt()
+            strt_game()
+    else:
+        print()
+        display_text("""  "No turning around now" """)
+        print()
+        door_sel_4()
+
+
+def strt_game():  # function to control the order the game takes place
+    adventure = (input('\"What will it be little one?\"  (1/ 2/ 3) > _ '))
+    if adventure == '1':
+        print()
+        lead_story()
+        door_sel_1()
+        room_1()
+    elif adventure == '2':
+        print()
+        door_sel_1()
+        room_1()
+    elif adventure == '3':
+        print()
+        print('\"As expected of a feeble specter\" ')
+
+    elif adventure == '4':
+        print()
+        print("""\"Thou hast chosen thy forth choice,
+Art thou foolish!!
+Leave thy ears in thy tender words, child of folly\"""")
+        print()
+        game_opt()
+        strt_game()
+    else:
+        print()
+        print('"Art thou devoid of thy tender noggin,')
+        print("""Hark, ye attentive ears, 
+for I shall discourse once again\"""")
+        print()
+        game_opt()
+        strt_game()
+        print()
+
+
+strt_game()
 
