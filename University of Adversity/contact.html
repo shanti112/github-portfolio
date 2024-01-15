@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>University of Adversity</title>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Zilla+Slab:ital,wght@0,300;0,400;0,500;0,600;0,700;1,700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.2/css/fontawesome.min.css"
+    />
+  </head>
+  <body>
+    <section class="sub-header">
+      <nav>
+        <a href="index.html"><img src="images/a logo.jpg" /></a>
+        <div class="nav-links" id="navLinks">
+          <i class="bx bx-window-close" onclick="hideMenu()"></i>
+          <ul>
+            <li><a href="index.html">HOME</a></li>
+            <li><a href="about.html">ABOUT</a></li>
+            <li><a href="course.html">COURSE</a></li>
+            <li><a href="blog.html">BLOG</a></li>
+            <li><a href="contact.html">CONTACT</a></li>
+          </ul>
+        </div>
+        <i class="bx bx-menu" onclick="showMenu()"></i>
+      </nav>
+
+      <h1>CONTACT US</h1>
+    </section>
+    <!--------------------------------contact us---------------------->
+
+    <section class="location">
+      <iframe
+        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15847.320790272654!2d-58.04334634999999!3d6.790506349999999!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8dafed0e4dddd31b%3A0x796b75108aacfef6!2sLusignan!5e0!3m2!1sen!2sgy!4v1705268291819!5m2!1sen!2sgy"
+        width="600"
+        height="450"
+        style="border: 0"
+        allowfullscreen=""
+        loading="lazy"
+        referrerpolicy="no-referrer-when-downgrade"
+      ></iframe>
+    </section>
+    <section class="contact-us">
+      <div class="row">
+        <div class="contact-col">
+          <div>
+            <i class="bx bx-home"></i>
+            <span>
+              <h5>ABC road, XYZ building</h5>
+              <p>Lusignan E.C.D, Guyana</p>
+            </span>
+          </div>
+          <div>
+            <i class="bx bxs-phone-call"></i>
+            <span>
+              <h5>+592 6386625</h5>
+              <p>Monday to Friday from 8am-10pm</p>
+            </span>
+          </div>
+          <div>
+            <i class="bx bxs-envelope"></i>
+            <span>
+              <h5>for more info email shantijagger1234@gmail.com</h5>
+              <p>drop an email when you can!!!</p>
+            </span>
+          </div>
+        </div>
+
+        <div class="contact-col">
+          <form action="font-handler.php" method="post">
+            <input
+              type="text"
+              name="name"
+              placeholder="ENTER YOUR NAME"
+              required
+            />
+            <input
+              type="email"
+              name="email"
+              placeholder="ENTER EMAIL"
+              required
+            />
+            <input
+              type="text"
+              name="subject"
+              placeholder="ENTER YOUR SUBJECT"
+              required
+            />
+            <textarea
+              rows="8"
+              name="message"
+              placeholder="MESSAGE"
+              required
+            ></textarea>
+            <button type="submit" class="hero-btn blue-btn">
+              SEND MESSAGE
+            </button>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <!------------------------footer--------------------->
+    <section class="footer">
+      <h4>ABOUT US</h4>
+      <p>
+        Lorem ipsum, dolor sit amet consectetur adipisicing elit. Cum sunt,
+        excepturi officiis autem vitae<br />
+        labore, non vero totam fugit in, facilis illum odio eaque! Ipsam fuga
+        blanditiis quas molestias voluptas.
+      </p>
+      <div class="icons">
+        <i class="bx bxl-facebook-circle"></i>
+        <i class="bx bxl-twitter"></i>
+        <i class="bx bxl-instagram-alt"></i>
+        <i class="bx bxl-linkedin-square"></i>
+        <p>
+          Made with <i class="bx bxs-heart bx-border-circle"></i> by Shanti
+          Jaggernauth
+        </p>
+      </div>
+    </section>
+
+    <!---------JavaScript for Toggle menu-------->
+    <script>
+      var navLinks = document.getElementById("navLinks");
+      function showMenu() {
+        navLinks.style.right = "0";
+      }
+      function hideMenu() {
+        navLinks.style.right = "-200px";
+      }
+    </script>
+  </body>
+</html>

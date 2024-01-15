@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>University of Adversity</title>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Zilla+Slab:ital,wght@0,300;0,400;0,500;0,600;0,700;1,700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.2/css/fontawesome.min.css"
+    />
+  </head>
+  <body>
+    <section class="sub-header">
+      <nav>
+        <a href="index.html"><img src="images/a logo.jpg" /></a>
+        <div class="nav-links" id="navLinks">
+          <i class="bx bx-window-close" onclick="hideMenu()"></i>
+          <ul>
+            <li><a href="index.html">HOME</a></li>
+            <li><a href="about.html">ABOUT</a></li>
+            <li><a href="course.html">COURSE</a></li>
+            <li><a href="blog.html">BLOG</a></li>
+            <li><a href="contact.html">CONTACT</a></li>
+          </ul>
+        </div>
+        <i class="bx bx-menu" onclick="showMenu()"></i>
+      </nav>
+
+      <h1>ABOUT US</h1>
+    </section>
+
+    <!-----------------------------about us content------------------>
+
+    <section class="about-us">
+      <div class="row">
+        <div class="about-col">
+          <h1>We are the World's Best University</h1>
+          <p>
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Labore
+            similique provident ut doloribus? Amet delectus praesentium veniam,
+            in excepturi cupiditate, doloribus dolorum vero qui repellat rem,
+            autem sapiente ad laudantium.
+          </p>
+          <a href="blog.html" class="hero-btn blue-btn">EXPLORE NOW</a>
+        </div>
+        <div class="about-col">
+          <img src="images/lecture hall.jpg" />
+        </div>
+      </div>
+    </section>
+
+    <!------------------------footer--------------------->
+    <section class="footer">
+      <h4>ABOUT US</h4>
+      <p>
+        Lorem ipsum, dolor sit amet consectetur adipisicing elit. Cum sunt,
+        excepturi officiis autem vitae<br />
+        labore, non vero totam fugit in, facilis illum odio eaque! Ipsam fuga
+        blanditiis quas molestias voluptas.
+      </p>
+      <div class="icons">
+        <i class="bx bxl-facebook-circle"></i>
+        <i class="bx bxl-twitter"></i>
+        <i class="bx bxl-instagram-alt"></i>
+        <i class="bx bxl-linkedin-square"></i>
+        <p>
+          Made with <i class="bx bxs-heart bx-border-circle"></i> by Shanti
+          Jaggernauth
+        </p>
+      </div>
+    </section>
+
+    <!---------JavaScript for Toggle menu-------->
+    <script>
+      var navLinks = document.getElementById("navLinks");
+      function showMenu() {
+        navLinks.style.right = "0";
+      }
+      function hideMenu() {
+        navLinks.style.right = "-200px";
+      }
+    </script>
+  </body>
+</html>
